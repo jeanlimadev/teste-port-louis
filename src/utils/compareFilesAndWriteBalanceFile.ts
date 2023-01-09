@@ -33,29 +33,29 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
     return accumulator;
   }, {});
   
-  const totalPedidos = [];
+  const ordersTotal = [];
   
   for (const key in ordersReduced) {
-    let valor_total_pedido = 0;
+    let total = 0;
   
     ordersReduced[key].forEach(item => {
-      valor_total_pedido += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
+      total += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
     });
   
     const orderReturn = {
       id_pedido: key,
-      valor_total_pedido
+      valor_total_pedido: total.toFixed(2).replace(".", ",")
     };
   
-    totalPedidos.push(orderReturn);
+    ordersTotal.push(orderReturn);
   };
   
   const finalReport: report[] = [];
   
   for (const key in ordersPendingReduced) {
-    let valor_total_pedido = totalPedidos.filter(item => item.id_pedido === key);
+    let order = ordersTotal.filter(item => item.id_pedido === key);
   
-    let saldo_pendente = 0;
+    let pendingTotal = 0;
     
     const itens_pendentes = ordersPendingReduced[key].map(item => {
       return {
@@ -69,13 +69,13 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
     });
   
     ordersPendingReduced[key].forEach(item => {
-      saldo_pendente += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
+      pendingTotal += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
     });
   
     const report: report = {
       id_pedido: key,
-      valor_total_pedido: valor_total_pedido[0].valor_total_pedido,
-      saldo_pendente,
+      valor_total_pedido: order[0].valor_total_pedido,
+      saldo_pendente: pendingTotal.toFixed(2).replace(".", ","),
       itens_pendentes
     };
   

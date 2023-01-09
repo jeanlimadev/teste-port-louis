@@ -1,6 +1,6 @@
-import { getBalanceAndWriteFile } from "./utils/writeBalanceFile";
+import { compareFilesAndWriteBalanceFile } from "./utils/compareFilesAndWriteBalanceFile";
 
-getBalanceAndWriteFile('src/Pedidos', 'src/Notas');
+compareFilesAndWriteBalanceFile('src/Pedidos', 'src/Notas');
 
 
 

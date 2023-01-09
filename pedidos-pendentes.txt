@@ -1,3 +1,0 @@
-{"id_pedido":"2","valor_total_pedido":818,"saldo_pendente":500,"itens_pendentes":[{"número_item":2,"saldo_quantidade":25}]}
-{"id_pedido":"3","valor_total_pedido":2667,"saldo_pendente":413,"itens_pendentes":[{"número_item":1,"saldo_quantidade":27},{"número_item":2,"saldo_quantidade":4},{"número_item":3,"saldo_quantidade":5}]}
-{"id_pedido":"5","valor_total_pedido":2400,"saldo_pendente":555.9,"itens_pendentes":[{"número_item":1,"saldo_quantidade":3},{"número_item":2,"saldo_quantidade":15},{"número_item":4,"saldo_quantidade":9},{"número_item":6,"saldo_quantidade":1}]}

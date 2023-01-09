@@ -1,6 +1,6 @@
 export interface report {
   id_pedido: string;
-  valor_total_pedido: number;
-  saldo_pendente: number;
+  valor_total_pedido: string;
+  saldo_pendente: string;
   itens_pendentes: {}
 }
