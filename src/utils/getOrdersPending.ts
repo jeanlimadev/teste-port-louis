@@ -7,7 +7,7 @@ export function getOrdersPending(pathOrders: string, pathInvoices: string): orde
   const invoices = readInvoices(pathInvoices);
 
   const ordersPending = orders.map(order => {
-    const invoicesFiltered = invoices.filter(invoice => invoice.id_pedido === Number(order.id_pedido) && invoice.número_item === order.número_item);
+    const invoicesFiltered = invoices.filter(invoice => String(invoice.id_pedido) === String(order.id_pedido) && invoice.número_item === order.número_item);
   
     if(invoicesFiltered.length > 0) {
       let soma = 0;

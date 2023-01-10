@@ -3,4 +3,3 @@ import { compareFilesAndWriteBalanceFile } from "./utils/compareFilesAndWriteBal
 compareFilesAndWriteBalanceFile('src/Pedidos', 'src/Notas');
 
 
-

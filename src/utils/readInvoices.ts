@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import { invoice } from '../dtos/invoice';
+import { validateInvoiceSchema } from './validateInvoiceSchema';
 
 export function readInvoices(dir: string): invoice[] {
   const invoices: invoice[] = [];
@@ -11,6 +12,7 @@ export function readInvoices(dir: string): invoice[] {
     const contentToJson = content.split('\n').map(line => JSON.parse(line.trim()));
 
     contentToJson.forEach(line => {
+      validateInvoiceSchema(line)
       invoices.push(line);
     });
   });

@@ -7,28 +7,29 @@ import { order } from "../dtos/order";
 import { orderReturn } from "../dtos/orderReturn";
 import { report } from "../dtos/report";
 import { formatObjectToString } from "./formatObjectToString";
+import { validateOrderSchema } from "./validateOrderSchema";
 
 export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices: string) {
   const orders = readOrders(pathOrders);
-
-  const ordersPending = getOrdersPending(pathOrders, pathInvoices);
 
   const ordersReduced = orders.reduce((accumulator: orderReturn, current: order) => {
     if (accumulator[current.id_pedido]) {
       accumulator[current.id_pedido].push(current);
     } else {
       accumulator[current.id_pedido] = [current];
-    }
+    };
 
     return accumulator;
   }, {});
+
+  const ordersPending = getOrdersPending(pathOrders, pathInvoices);
 
   const ordersPendingReduced = ordersPending.reduce((accumulator: orderReturn, current: order) => {
     if (accumulator[current.id_pedido]) {
       accumulator[current.id_pedido].push(current);
     } else {
       accumulator[current.id_pedido] = [current];
-    }
+    };
   
     return accumulator;
   }, {});
@@ -89,5 +90,5 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
     console.log("File created!");
   } catch (error) {
     console.log({message: "Error!", error: error});
-  }
-}
+  };
+};

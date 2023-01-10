@@ -1,5 +1,5 @@
 export interface order {
-  id_pedido: number;
+  id_pedido: string;
   número_item: number;
   código_produto: string;
   quantidade_produto: number;

@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import { order } from '../dtos/order';
+import { validateOrderSchema } from './validateOrderSchema';
 
 export function readOrders(dir: string): order[] {
   const orders: order[] = [];
@@ -11,6 +12,7 @@ export function readOrders(dir: string): order[] {
     const contentToJson = content.split('\n').map(line => JSON.parse(line.trim()));
 
     contentToJson.forEach(order => {
+      validateOrderSchema(order)
       orders.push({
         id_pedido: file.replace('.txt', '').replace('P', ''),
         ...order
