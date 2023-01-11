@@ -32,7 +32,7 @@ export function readOrders(dir: string): orderReturn {
     return accumulator;
   }, {});
 
-  validateItemsNumbers(ordersObject)
+  validateItemsNumbers(ordersObject);
 
   return ordersObject;
 };
