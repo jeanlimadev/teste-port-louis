@@ -49,13 +49,13 @@ export function validateOrderSchema(order: order): boolean {
     valor_unitário_produto: (order: order): boolean => {
       const regex = /^\d+(,\d+)?$/;
       const isNumericAndPositive = regex.test(order.valor_unitário_produto);
-      const splitedValue = order.valor_unitário_produto.toString().split(",");
+      const splittedValue = order.valor_unitário_produto.toString().split(",");
 
       if (!isNumericAndPositive) {
         throw new Error(`Error! The value of valor_unitário_produto must to be a numeric and positive`);
       };
 
-      if (splitedValue[1]?.length > 2) {
+      if (splittedValue[1]?.length > 2) {
         throw new Error(`Error! The value of valor_unitário_produto cannot exceed two decimal places`);
       };
 

@@ -2,44 +2,25 @@ import fs from "fs";
 
 import { getOrdersPending } from "./getOrdersPending";
 import { readOrders } from "./readOrders";
-
-import { order } from "../dtos/order";
-import { orderReturn } from "../dtos/orderReturn";
-import { report } from "../dtos/report";
 import { formatObjectToString } from "./formatObjectToString";
-import { validateOrderSchema } from "./validateOrderSchema";
+
+import { report } from "../dtos/report";
+
+interface PendingItems {
+  número_item: number;
+  saldo_quantidade: number;
+}
 
 export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices: string) {
   const orders = readOrders(pathOrders);
-
-  const ordersReduced = orders.reduce((accumulator: orderReturn, current: order) => {
-    if (accumulator[current.id_pedido]) {
-      accumulator[current.id_pedido].push(current);
-    } else {
-      accumulator[current.id_pedido] = [current];
-    };
-
-    return accumulator;
-  }, {});
-
   const ordersPending = getOrdersPending(pathOrders, pathInvoices);
-
-  const ordersPendingReduced = ordersPending.reduce((accumulator: orderReturn, current: order) => {
-    if (accumulator[current.id_pedido]) {
-      accumulator[current.id_pedido].push(current);
-    } else {
-      accumulator[current.id_pedido] = [current];
-    };
-  
-    return accumulator;
-  }, {});
   
   const ordersTotal = [];
   
-  for (const key in ordersReduced) {
+  for (const key in orders) {
     let total = 0;
   
-    ordersReduced[key].forEach(item => {
+    orders[key].forEach(item => {
       total += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
     });
   
@@ -53,23 +34,25 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
   
   const finalReport: report[] = [];
   
-  for (const key in ordersPendingReduced) {
+  for (const key in ordersPending) {
     let order = ordersTotal.filter(item => item.id_pedido === key);
   
     let pendingTotal = 0;
     
-    const itens_pendentes = ordersPendingReduced[key].map(item => {
-      return {
+    const itens_pendentes = ordersPending[key].map(item => {
+      const pendingItems: PendingItems = {
         número_item: item.número_item,
         saldo_quantidade: item.quantidade_produto
-      };
-    }).sort((a, b) => {
+      }
+
+      return pendingItems;
+    }).sort((a: PendingItems, b: PendingItems) => {
       if (a.número_item < b.número_item) return -1;
       if (a.número_item > b.número_item) return 1;
       return 0;
     });
   
-    ordersPendingReduced[key].forEach(item => {
+    ordersPending[key].forEach(item => {
       pendingTotal += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
     });
   

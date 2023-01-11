@@ -1,9 +1,11 @@
 import fs from 'fs';
 
 import { order } from '../dtos/order';
+import { orderReturn } from '../dtos/orderReturn';
+import { validateItemsNumbers } from './validateItemsNumbers';
 import { validateOrderSchema } from './validateOrderSchema';
 
-export function readOrders(dir: string): order[] {
+export function readOrders(dir: string): orderReturn {
   const orders: order[] = [];
   const files = fs.readdirSync(dir);
 
@@ -20,5 +22,17 @@ export function readOrders(dir: string): order[] {
     });
   });
 
-  return orders;
+  const ordersObject = orders.reduce((accumulator: orderReturn, current: order) => {
+    if (accumulator[current.id_pedido]) {
+      accumulator[current.id_pedido].push(current);
+    } else {
+      accumulator[current.id_pedido] = [current];
+    };
+
+    return accumulator;
+  }, {});
+
+  validateItemsNumbers(ordersObject)
+
+  return ordersObject;
 };
