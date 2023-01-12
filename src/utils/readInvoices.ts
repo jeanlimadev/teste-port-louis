@@ -13,7 +13,7 @@ export function readInvoices(dir: string): invoice[] {
     const contentToJson = content.split('\n').map(line => JSON.parse(line.trim()));
 
     contentToJson.forEach(line => {
-      validateInvoiceSchema(line)
+      validateInvoiceSchema(line, file)
       invoices.push(line);
     });
   });
