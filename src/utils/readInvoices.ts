@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import { invoice } from '../dtos/invoice';
+import { validateInvoices } from './validateInvoices';
 import { validateInvoiceSchema } from './validateInvoiceSchema';
 
 export function readInvoices(dir: string): invoice[] {
@@ -16,6 +17,8 @@ export function readInvoices(dir: string): invoice[] {
       invoices.push(line);
     });
   });
+
+  validateInvoices(invoices);
 
   return invoices;
 };

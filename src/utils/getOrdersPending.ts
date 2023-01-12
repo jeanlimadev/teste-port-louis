@@ -18,6 +18,10 @@ export function getOrdersPending(pathOrders: string, pathInvoices: string): orde
         invoicesFiltered.forEach(item => {
           soma += Number(item.quantidade_produto);
         });
+
+        if (soma > order.quantidade_produto) {
+          throw new Error('The total items in the notes exceed the order total');
+        };
     
         order.quantidade_produto -= soma;
       }

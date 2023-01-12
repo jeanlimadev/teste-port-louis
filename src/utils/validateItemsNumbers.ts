@@ -1,4 +1,3 @@
-import { order } from "../dtos/order";
 import { orderReturn } from "../dtos/orderReturn";
 
 export function validateItemsNumbers(orders: orderReturn): boolean {
