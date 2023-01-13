@@ -1,12 +1,12 @@
-import { invoice } from "../dtos/invoice";
+import { invoiceLine } from '../dtos/invoiceLine';
 
 interface Schema {
-  [param: string]: (invoice: any, fileName: string) => boolean;
+  [param: string]: (invoice: invoiceLine, fileName: string) => boolean;
 }
 
-export function validateInvoiceSchema(invoice: invoice, fileName: string): boolean {
+export function validateInvoiceSchema(invoice: invoiceLine, fileName: string): boolean {
   const schemaValidation: Schema = {
-    id_pedido: (invoice: invoice, fileName: string): boolean => {
+    id_pedido: (invoice: invoiceLine, fileName: string): boolean => {
       const regex = /^[a-zA-Z0-9]+$/;
       const isAlphanumeric = regex.test(invoice.id_pedido);
 
@@ -16,7 +16,7 @@ export function validateInvoiceSchema(invoice: invoice, fileName: string): boole
 
       return true;
     },
-    número_item: (invoice: invoice, fileName: string): boolean => {
+    número_item: (invoice: invoiceLine, fileName: string): boolean => {
       if (typeof invoice.número_item != 'number') {
         throw new Error(`Error on file ${fileName}! The value of número_item on file must to be a number`);
       };
@@ -31,7 +31,7 @@ export function validateInvoiceSchema(invoice: invoice, fileName: string): boole
 
       return true;
     },
-    quantidade_produto: (invoice: invoice, fileName: string): boolean => {
+    quantidade_produto: (invoice: invoiceLine, fileName: string): boolean => {
       if (typeof invoice.quantidade_produto != 'number') {
         throw new Error(`Error on file ${fileName}! The value of quantidade_produto must to be a number`);
       };

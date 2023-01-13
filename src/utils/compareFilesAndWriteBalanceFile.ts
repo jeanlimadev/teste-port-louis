@@ -5,11 +5,8 @@ import { readOrders } from './readOrders';
 import { formatObjectToString } from './formatObjectToString';
 
 import { report } from '../dtos/report';
+import { pendingItems } from '../dtos/pendingItems';
 
-interface PendingItems {
-  número_item: number;
-  saldo_quantidade: number;
-}
 
 export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices: string) {
   const orders = readOrders(pathOrders);
@@ -20,50 +17,44 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
   for (const key in orders) {
     let total = 0;
   
-    orders[key].forEach(item => {
-      total += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(',', '.'));
+    orders[key].forEach(line => {
+      total += line.quantidade_produto * parseFloat(line.valor_unitário_produto.replace(',', '.'));
     });
   
-    const orderReturn = {
+    ordersTotal.push({
       id_pedido: key,
       valor_total_pedido: total.toFixed(2).replace('.', ',')
-    };
-  
-    ordersTotal.push(orderReturn);
+    });
   };
   
   const finalReport: report[] = [];
   
   for (const key in ordersPending) {
-    let order = ordersTotal.filter(item => item.id_pedido === key);
+    const order = ordersTotal.filter(item => item.id_pedido === key);
   
     let pendingTotal = 0;
     
-    const itens_pendentes = ordersPending[key].map(item => {
-      const pendingItems: PendingItems = {
-        número_item: item.número_item,
-        saldo_quantidade: item.quantidade_produto
-      }
-
-      return pendingItems;
-    }).sort((a: PendingItems, b: PendingItems) => {
+    const itens_pendentes: pendingItems[] = ordersPending[key].map(line => {
+      return {
+        número_item: line.número_item,
+        saldo_quantidade: line.quantidade_produto
+      };
+    }).sort((a, b) => {
       if (a.número_item < b.número_item) return -1;
       if (a.número_item > b.número_item) return 1;
       return 0;
     });
   
-    ordersPending[key].forEach(item => {
-      pendingTotal += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(',', '.'));
+    ordersPending[key].forEach(line => {
+      pendingTotal += line.quantidade_produto * parseFloat(line.valor_unitário_produto.replace(',', '.'));
     });
   
-    const report: report = {
+    finalReport.push({
       id_pedido: key,
       valor_total_pedido: order[0].valor_total_pedido,
       saldo_pendente: pendingTotal.toFixed(2).replace('.', ','),
       itens_pendentes
-    };
-  
-    finalReport.push(report);
+    });
   }
   
   const ordersToStringFormat = formatObjectToString(finalReport);

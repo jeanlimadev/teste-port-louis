@@ -1,20 +1,21 @@
 import fs from 'fs';
 
-import { invoice } from '../dtos/invoice';
 import { validateInvoices } from './validateInvoices';
 import { validateInvoiceSchema } from './validateInvoiceSchema';
 
-export function readInvoices(dir: string): invoice[] {
-  const invoices: invoice[] = [];
-  const files = fs.readdirSync(dir);
+import { invoiceLine } from '../dtos/invoiceLine';
+
+export function readInvoices(path: string): invoiceLine[] {
+  const invoices: invoiceLine[] = [];
+  const files = fs.readdirSync(path);
 
   files.forEach(file => {
-    const content = fs.readFileSync(dir + '/' + file, 'utf-8');
+    const content = fs.readFileSync(path + '/' + file, 'utf-8');
     const contentToJson = content.split('\n').map(line => JSON.parse(line.trim()));
 
-    contentToJson.forEach(line => {
-      validateInvoiceSchema(line, file)
-      invoices.push(line);
+    contentToJson.forEach(invoiceItem => {
+      validateInvoiceSchema(invoiceItem, file)
+      invoices.push(invoiceItem);
     });
   });
 

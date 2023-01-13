@@ -1,9 +1,9 @@
-import { orderReturn } from "../dtos/orderReturn";
+import { order } from '../dtos/order';
 
-export function validateItemsNumbers(orders: orderReturn): boolean {
+export function validateItemsNumbers(orders: order): boolean {
   for (const key in orders) {
-    const items = orders[key].map(item => {
-      return item.número_item;
+    const items = orders[key].map(orderItem => {
+      return orderItem.número_item;
     }).sort((a: number, b: number) => {
       if (a < b) return -1;
       if (a > b) return 1;

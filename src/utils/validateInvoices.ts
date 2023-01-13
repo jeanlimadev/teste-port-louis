@@ -1,21 +1,21 @@
-import { readOrders } from "./readOrders";
+import { readOrders } from './readOrders';
 
-import { invoice } from "../dtos/invoice";
+import { invoiceLine } from '../dtos/invoiceLine';
 
-export function validateInvoices(invoices: invoice[]): boolean {
+export function validateInvoices(invoices: invoiceLine[]): boolean {
   const orders = readOrders('src/Pedidos');
 
-  invoices.forEach(invoice => {
-    if (!orders[String(invoice.id_pedido)]) {
-      throw new Error(`Order ${invoice.id_pedido} not found!`);
+  invoices.forEach(invoiceItem => {
+    if (!orders[String(invoiceItem.id_pedido)]) {
+      throw new Error(`Order ${invoiceItem.id_pedido} not found!`);
     };
 
-    const orderItems = orders[String(invoice.id_pedido)]
-      .map(order => order.número_item)
-      .includes(invoice.número_item);
+    const orderNumberItems = orders[String(invoiceItem.id_pedido)]
+      .map(orderItem => orderItem.número_item)
+      .includes(invoiceItem.número_item);
 
-    if (!orderItems) {
-      throw new Error(`Item ${invoice.número_item} not found on order ${invoice.id_pedido}!`);
+    if (!orderNumberItems) {
+      throw new Error(`Item ${invoiceItem.número_item} not found on order ${invoiceItem.id_pedido}!`);
     };
   });
 

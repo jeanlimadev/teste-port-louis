@@ -1,3 +1,3 @@
-import { compareFilesAndWriteBalanceFile } from "./utils/compareFilesAndWriteBalanceFile";
+import { compareFilesAndWriteBalanceFile } from './utils/compareFilesAndWriteBalanceFile';
 
 compareFilesAndWriteBalanceFile('src/Pedidos', 'src/Notas');

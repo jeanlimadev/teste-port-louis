@@ -1,36 +1,37 @@
-import { order } from "../dtos/order";
-import { orderReturn } from "../dtos/orderReturn";
-import { readInvoices } from "./readInvoices";
-import { readOrders } from "./readOrders";
+import { readInvoices } from './readInvoices';
+import { readOrders } from './readOrders';
 
-export function getOrdersPending(pathOrders: string, pathInvoices: string): orderReturn {
+import { orderLine } from '../dtos/orderLine';
+import { order } from '../dtos/order';
+
+export function getOrdersPending(pathOrders: string, pathInvoices: string): order {
   const orders = readOrders(pathOrders);
   const invoices = readInvoices(pathInvoices);
 
-  const ordersPending: order[] = [];
+  const ordersPending: orderLine[] = [];
 
   for (const key in orders) {
-    orders[key].map(order => {
-      const invoicesFiltered = invoices.filter(invoice => String(invoice.id_pedido) === String(order.id_pedido) && invoice.número_item === order.número_item);
+    orders[key].map(orderItem => {
+      const referringInvoices = invoices.filter(invoice => String(invoice.id_pedido) === String(orderItem.id_pedido) && invoice.número_item === orderItem.número_item);
     
-      if(invoicesFiltered.length > 0) {
+      if(referringInvoices.length > 0) {
         let soma = 0;
-        invoicesFiltered.forEach(item => {
-          soma += Number(item.quantidade_produto);
+        referringInvoices.forEach(invoiceItem => {
+          soma += invoiceItem.quantidade_produto;
         });
 
-        if (soma > order.quantidade_produto) {
-          throw new Error(`Error! Sum of items on invoices referring to item ${order.número_item} on order ${order.id_pedido} exceed available amount.`);
+        if (soma > orderItem.quantidade_produto) {
+          throw new Error(`Error! Sum of items on invoices referring to item ${orderItem.número_item} on order ${orderItem.id_pedido} exceed available amount.`);
         };
     
-        order.quantidade_produto -= soma;
+        orderItem.quantidade_produto -= soma;
       }
     
-      ordersPending.push(order);
+      ordersPending.push(orderItem);
     });
   };
 
-  const ordersPendingFiltered = ordersPending.reduce((accumulator: orderReturn, current: order) => {
+  const ordersArrayToObject = ordersPending.reduce((accumulator: order, current: orderLine) => {
     if (current.quantidade_produto <= 0) {
       null
     } else if (accumulator[current.id_pedido]) {
@@ -42,5 +43,5 @@ export function getOrdersPending(pathOrders: string, pathInvoices: string): orde
     return accumulator;
   }, {})
 
-  return ordersPendingFiltered;
+  return ordersArrayToObject;
 };

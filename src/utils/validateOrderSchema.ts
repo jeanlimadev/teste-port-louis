@@ -1,12 +1,12 @@
-import { order } from "../dtos/order";
+import { orderLine } from '../dtos/orderLine';
 
 interface Schema {
-  [order: string]: (order: any, fileName: string) => boolean;
+  [param: string]: (order: any, fileName: string) => boolean;
 }
 
-export function validateOrderSchema(order: order, fileName: string): boolean {
+export function validateOrderSchema(order: orderLine, fileName: string): boolean {
   const schemaValidation: Schema = {
-    número_item: (order: order, fileName: string): boolean => {
+    número_item: (order: orderLine, fileName: string): boolean => {
       if (typeof order.número_item != 'number') {
         throw new Error(`Error on file ${fileName}! The value of número_item must to be a number`);
       };
@@ -21,7 +21,7 @@ export function validateOrderSchema(order: order, fileName: string): boolean {
 
       return true;
     },
-    código_produto: (order: order, fileName: string): boolean => {
+    código_produto: (order: orderLine, fileName: string): boolean => {
       const regex = /^[a-zA-Z0-9]+$/;
       const isAlphanumeric = regex.test(order.código_produto);
 
@@ -31,7 +31,7 @@ export function validateOrderSchema(order: order, fileName: string): boolean {
 
       return true;
     },
-    quantidade_produto: (order: order, fileName: string): boolean => {
+    quantidade_produto: (order: orderLine, fileName: string): boolean => {
       if (typeof order.quantidade_produto != 'number') {
         throw new Error(`Error on file ${fileName}! The value of quantidade_produto must to be a number`);
       };
@@ -46,10 +46,10 @@ export function validateOrderSchema(order: order, fileName: string): boolean {
 
       return true;
     },
-    valor_unitário_produto: (order: order, fileName: string): boolean => {
+    valor_unitário_produto: (order: orderLine, fileName: string): boolean => {
       const regex = /^\d+(,\d+)?$/;
       const isNumericAndPositive = regex.test(order.valor_unitário_produto);
-      const splittedValue = order.valor_unitário_produto.toString().split(",");
+      const splittedValue = order.valor_unitário_produto.toString().split(',');
 
       if (!isNumericAndPositive) {
         throw new Error(`Error on file ${fileName}! The value of valor_unitário_produto must to be a numeric and positive`);
