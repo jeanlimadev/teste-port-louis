@@ -1,11 +1,11 @@
-import { report } from "../dtos/report";
+import { report } from '../dtos/report';
 
 export function formatObjectToString(ordersPending: report[]): string {
-    let ordersString = "";
-  
-    ordersPending.forEach(item => {
-      ordersString += JSON.stringify(item) + "\n";
-    });
-  
-    return ordersString;
+  const ordersString = ordersPending.reduce((accumulator, current) => {
+    accumulator += JSON.stringify(current) + '\n';
+
+    return accumulator
+  }, '');
+
+  return ordersString;
 }

@@ -7,7 +7,7 @@ export function validateInvoices(invoices: invoice[]): boolean {
 
   invoices.forEach(invoice => {
     if (!orders[String(invoice.id_pedido)]) {
-      throw new Error('Order not found!');
+      throw new Error(`Order ${invoice.id_pedido} not found!`);
     };
 
     const orderItems = orders[String(invoice.id_pedido)]
@@ -15,7 +15,7 @@ export function validateInvoices(invoices: invoice[]): boolean {
       .includes(invoice.número_item);
 
     if (!orderItems) {
-      throw new Error('Item not found!');
+      throw new Error(`Item ${invoice.número_item} not found on order ${invoice.id_pedido}!`);
     };
   });
 

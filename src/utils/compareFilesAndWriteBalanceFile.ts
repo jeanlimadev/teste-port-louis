@@ -1,10 +1,10 @@
-import fs from "fs";
+import fs from 'fs';
 
-import { getOrdersPending } from "./getOrdersPending";
-import { readOrders } from "./readOrders";
-import { formatObjectToString } from "./formatObjectToString";
+import { getOrdersPending } from './getOrdersPending';
+import { readOrders } from './readOrders';
+import { formatObjectToString } from './formatObjectToString';
 
-import { report } from "../dtos/report";
+import { report } from '../dtos/report';
 
 interface PendingItems {
   número_item: number;
@@ -21,12 +21,12 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
     let total = 0;
   
     orders[key].forEach(item => {
-      total += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
+      total += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(',', '.'));
     });
   
     const orderReturn = {
       id_pedido: key,
-      valor_total_pedido: total.toFixed(2).replace(".", ",")
+      valor_total_pedido: total.toFixed(2).replace('.', ',')
     };
   
     ordersTotal.push(orderReturn);
@@ -53,13 +53,13 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
     });
   
     ordersPending[key].forEach(item => {
-      pendingTotal += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(",", "."));
+      pendingTotal += item.quantidade_produto * parseFloat(item.valor_unitário_produto.replace(',', '.'));
     });
   
     const report: report = {
       id_pedido: key,
       valor_total_pedido: order[0].valor_total_pedido,
-      saldo_pendente: pendingTotal.toFixed(2).replace(".", ","),
+      saldo_pendente: pendingTotal.toFixed(2).replace('.', ','),
       itens_pendentes
     };
   
@@ -69,9 +69,10 @@ export function compareFilesAndWriteBalanceFile(pathOrders: string, pathInvoices
   const ordersToStringFormat = formatObjectToString(finalReport);
   
   try {
-    fs.writeFileSync("pedidos-pendentes.txt", ordersToStringFormat);
-    console.log("File created!");
+    const fileName = 'pedidos-pendentes.txt'
+    fs.writeFileSync(fileName, ordersToStringFormat);
+    console.log(`File ${fileName} created!`);
   } catch (error) {
-    console.log({message: "Error!", error: error});
+    console.log({message: 'Error!', error: error});
   };
 };

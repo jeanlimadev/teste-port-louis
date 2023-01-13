@@ -14,8 +14,8 @@ export function readOrders(dir: string): orderReturn {
     const contentToJson = content.split('\n').map(line => JSON.parse(line.trim()));
 
     contentToJson.forEach(order => {
-      validateOrderSchema(order, file)
-
+      validateOrderSchema(order, file);
+      
       orders.push({
         id_pedido: file.replace('.txt', '').replace('P', ''),
         ...order
