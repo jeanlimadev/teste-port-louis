@@ -13,11 +13,11 @@ export function validateItemsNumbers(orders: order): boolean {
     const hasDuplicates = new Set(items).size !== items.length;
 
     if (hasDuplicates) {
-      throw new Error(`There are duplicate items on order ${key}!`);
+      throw `There are duplicate items on order ${key}!`;
     };
 
     if (!itemsOrderIsCorrect(items)) {
-      throw new Error(`Items are not in sequence on order ${key}`);
+      throw `Items are not in sequence on order ${key}`;
     };
 
   }

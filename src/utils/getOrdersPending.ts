@@ -21,7 +21,7 @@ export function getOrdersPending(pathOrders: string, pathInvoices: string): orde
         });
 
         if (soma > orderItem.quantidade_produto) {
-          throw new Error(`Error! Sum of items on invoices referring to item ${orderItem.número_item} on order ${orderItem.id_pedido} exceed available amount.`);
+          throw `Error! Sum of items on invoices referring to item ${orderItem.número_item} on order ${orderItem.id_pedido} exceed available amount.`;
         };
     
         orderItem.quantidade_produto -= soma;
